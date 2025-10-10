@@ -1,4 +1,4 @@
-# Diffusion Policy with Push-F Task
+# Diffusion Policy with Push F Task
 
 Cloned repo from https://github.com/real-stanford/diffusion_policy/ to add a Push F task on top of the pre-existing Push T task. 
 
