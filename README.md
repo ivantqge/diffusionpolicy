@@ -4,17 +4,13 @@ This repository extends the original [Diffusion Policy](https://github.com/real-
 
 ## New Files Added for PushF Task
 
-### Core Environment
 ```
 diffusion_policy/env/pushf/
 ├── pushf_env.py                    
 ├── pushf_keypoints_env.py         
 ├── pushf_image_env.py            
 └── __init__.py                    
-```
 
-### Training Infra
-```
 diffusion_policy/env_runner/
 ├── pushf_keypoints_runner.py       
 └── pushf_image_runner.py           
@@ -22,29 +18,23 @@ diffusion_policy/env_runner/
 diffusion_policy/dataset/
 ├── pushf_dataset.py               
 └── pushf_image_dataset.py          
-```
 
-### Config Files
-```
 diffusion_policy/config/task/
 ├── pushf_lowdim.yaml              
 └── pushf_image.yaml               
 
 diffusion_policy/config/
 └── train_diffusion_transformer_lowdim_pushf_workspace.yaml 
-```
 
-### Demo + Data Collection
-```
 demo_pushf.py                      
-data/pushf_demo.zarr/              # Collected demonstration data
-```
 
-## Modified Files
-```
 diffusion_policy/env/pusht/pymunk_keypoint_manager.py
 └── Added create_from_pushf_env() method for F-shape keypoint generation
 ```
+
+## Data
+
+The data used to trained the AI can be found here [pushfdemos](https://drive.google.com/file/d/19VrydcIY7lWlIR6vTCRqkANRwMobyOQQ/view?usp=sharing)
 
 ## Additional Adjustments
 
