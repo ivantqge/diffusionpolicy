@@ -7,43 +7,45 @@ This repository extends the original [Diffusion Policy](https://github.com/real-
 ### Core Environment
 ```
 diffusion_policy/env/pushf/
-├── pushf_env.py                    # Base PushF environment with F-shaped object physics
-├── pushf_keypoints_env.py          # Keypoint-based observations for PushF
-├── pushf_image_env.py              # Image-based observations for PushF  
-└── __init__.py                     # Package initialization
+├── pushf_env.py                    
+├── pushf_keypoints_env.py         
+├── pushf_image_env.py            
+└── __init__.py                    
 ```
 
 ### Training Infra
 ```
 diffusion_policy/env_runner/
-├── pushf_keypoints_runner.py       # Environment runner for keypoint-based PushF training
-└── pushf_image_runner.py           # Environment runner for image-based PushF training
+├── pushf_keypoints_runner.py       
+└── pushf_image_runner.py           
 
 diffusion_policy/dataset/
-├── pushf_dataset.py                # Dataset loader for PushF keypoint demonstrations
-└── pushf_image_dataset.py          # Dataset loader for PushF image demonstrations
+├── pushf_dataset.py               
+└── pushf_image_dataset.py          
 ```
 
 ### Config Files
 ```
 diffusion_policy/config/task/
-├── pushf_lowdim.yaml               # Task config for keypoint-based PushF
-└── pushf_image.yaml                # Task config for image-based PushF
+├── pushf_lowdim.yaml              
+└── pushf_image.yaml               
 
 diffusion_policy/config/
-└── train_diffusion_transformer_lowdim_pushf_workspace.yaml  # Training config for PushF
+└── train_diffusion_transformer_lowdim_pushf_workspace.yaml 
 ```
 
 ### Demo + Data Collection
 ```
-demo_pushf.py                       # Interactive demo collection for PushF task
-data/pushf_demo.zarr/              # Collected demonstration data (22 episodes)
+demo_pushf.py                      
+data/pushf_demo.zarr/              # Collected demonstration data
 ```
 
 ## Modified Files
 ```
 diffusion_policy/env/pusht/pymunk_keypoint_manager.py
 └── Added create_from_pushf_env() method for F-shape keypoint generation
+
+## Additional Adjustments
 
 Few adjustments were made when importing packages:
 - removed import for imagecodecs==2022.8.8, installed with pip instead
