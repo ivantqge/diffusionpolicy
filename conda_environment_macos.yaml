@@ -43,7 +43,7 @@ dependencies:
   - av=10.0.0
   - cmake=3.24.3
   # trick to force reinstall imagecodecs via pip
-  - imagecodecs==2022.8.8
+  # - imagecodecs==2022.8.8 # ivan removed because causing issues w/libheif and openjpeg, just installed with pip below instead
   - pip:
     - ray[default,tune]==2.2.0
     - pygame==2.1.2
@@ -53,3 +53,5 @@ dependencies:
     # No support for jpeg-xl for MacOS
     - imagecodecs==2022.9.26
     - r3m @ https://github.com/facebookresearch/r3m/archive/b2334e726887fa0206962d7984c69c5fb09cceab.tar.gz
+  
+  # downgraded huggingface_hub to 0.19.4 instead of 0.34.4 due to cached_download issue for diffusers=0.11.1 version
