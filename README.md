@@ -44,6 +44,7 @@ data/pushf_demo.zarr/              # Collected demonstration data
 ```
 diffusion_policy/env/pusht/pymunk_keypoint_manager.py
 └── Added create_from_pushf_env() method for F-shape keypoint generation
+```
 
 ## Additional Adjustments
 
