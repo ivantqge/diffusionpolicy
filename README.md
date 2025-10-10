@@ -34,7 +34,7 @@ diffusion_policy/env/pusht/pymunk_keypoint_manager.py
 
 ## Data
 
-The data used to trained the AI can be found here [pushfdemos](https://drive.google.com/file/d/19VrydcIY7lWlIR6vTCRqkANRwMobyOQQ/view?usp=sharing)
+The data used to trained the AI can be found here [pushfdemos](https://drive.google.com/file/d/19VrydcIY7lWlIR6vTCRqkANRwMobyOQQ/view?usp=sharing).
 
 ## Additional Adjustments
 
