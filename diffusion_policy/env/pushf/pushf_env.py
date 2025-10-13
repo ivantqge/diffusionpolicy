@@ -379,7 +379,7 @@ class PushFEnv(gym.Env):
 
         # middle arm for the F
         mid_cx = (stem_w/2.0) + (mid_len/2.0)
-        mid_cy = s*0.1   adjust loc relative to the stem/top arm
+        mid_cy = s*0.1   # adjust loc relative to the stem/top arm
         verts_mid = rect(mid_cx, mid_cy, mid_len, arm_th)
 
         I = (
