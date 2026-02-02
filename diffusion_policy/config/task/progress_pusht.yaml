@@ -1,0 +1,9 @@
+name: progress_pusht
+
+# episodes .pkl produced by load_pusht_data.py -> save_trajectories_separate
+episodes_path: pusht_episodes.pkl
+
+# agent_state is [agent_x, agent_y, block_x, block_y, block_angle]
+agent_state_dim: 5
+
+

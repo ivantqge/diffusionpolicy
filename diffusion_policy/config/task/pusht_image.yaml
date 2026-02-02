@@ -31,7 +31,7 @@ env_runner:
 
 dataset:
   _target_: diffusion_policy.dataset.pusht_image_dataset.PushTImageDataset
-  zarr_path: data/pusht/pusht_cchi_v7_replay.zarr
+  zarr_path: data/pusht_cchi_v7_replay.zarr
   horizon: ${horizon}
   pad_before: ${eval:'${n_obs_steps}-1'}
   pad_after: ${eval:'${n_action_steps}-1'}

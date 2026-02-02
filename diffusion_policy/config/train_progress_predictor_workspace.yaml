@@ -1,0 +1,82 @@
+defaults:
+  - _self_
+  - task: progress_pusht
+
+name: train_progress_predictor
+_target_: diffusion_policy.workspace.train_progress_predictor_workspace.TrainProgressPredictorWorkspace
+
+model:
+  agent_state_dim: ${task.agent_state_dim}
+  pretrained: true  
+  freeze_encoder: true  
+  dropout: 0.1
+  num_bins: 50  #  for categorical mode,50 bins, each representing 2% of progress
+  mode: categorical  # either 'categorical' or 'regression'
+  encoder_ckpt_path: null  # can load encoder weights
+  action_chunk_horizon: 8  # number of future or past actions to condition on (only for non-windowed)
+  action_dim: 2
+  use_siamese: true  # Use two-tower encoder with start and current image fusion (only for non-windowed)
+
+  # Windowed architecture options
+  windowed: false  # Set to true to use windowed architecture
+  window_length: 4  # L: number of frames in window 
+  windows_per_episode: 16  # Number of windows to sample per episode
+  visual_feat_dim: 512  # Output dimension of visual encoder
+  state_feat_dim: 64  # Output dimension of state embedder 
+  token_dim: 256  # Dimension of fused tokens 
+  gru_hidden_dim: 128  # Hidden dimension of GRU 
+  
+dataset:
+  episodes_path: ${task.episodes_path}
+  train_ratio: 0.8
+
+dataloader:
+  batch_size: 16
+  num_workers: 0
+  shuffle: true
+  pin_memory: true
+  persistent_workers: false
+
+val_dataloader:
+  batch_size: 16
+  num_workers: 0
+  shuffle: false
+  pin_memory: true
+  persistent_workers: false
+
+optimizer:
+  learning_rate: 3.0e-4
+  weight_decay: 1.0e-4
+
+scheduler:
+  factor: 0.5
+  patience: 5
+
+training:
+  device: "cpu"
+  num_epochs: 50
+  patience: 10
+  tqdm_interval_sec: 1.0
+
+checkpoint:
+  best_path: progress_predictor_best.pth
+
+logging:
+  project: diffusion_policy_debug
+  resume: False
+  mode: online
+  name: ${now:%Y.%m.%d-%H.%M.%S}_${name}
+  tags: ["${name}", "progress"]
+  id: null
+  group: null
+
+hydra:
+  job:
+    override_dirname: ${name}
+  run:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}
+  sweep:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}
+    subdir: ${hydra.job.num}
+
+
