@@ -1,41 +1,66 @@
 """
 Inference script for windowed progress predictor models.
 
-This script handles evaluation and visualization for the windowed GRU-based
-progress predictor architecture.
+This script handles evaluation and visualization for the windowed progress
+predictor architectures (GRU-based and Transformer-based).
 """
 
 import torch
 import numpy as np
 from progress_predictor_windowed import ProgressPredictorWindowed
+from progress_predictor_transformer import ProgressPredictorTransformer
 import pickle
 import matplotlib.pyplot as plt
 
 
 def load_model(model_path='progress_predictor_best.pth', num_bins=50, pretrained=True, 
                freeze_encoder=True, mode=None, visual_feat_dim=512, state_feat_dim=64, 
-               token_dim=256, gru_hidden_dim=128, window_length=4):
+               token_dim=256, gru_hidden_dim=128, window_length=4, architecture='gru',
+               n_heads=8, n_layers=4, dim_feedforward=1024, dropout=0.1):
     """
-    Load windowed progress predictor model
+    Load windowed progress predictor model (GRU or Transformer)
+    
+    Args:
+        architecture: 'gru' or 'transformer'
     """
-    model = ProgressPredictorWindowed(
-        agent_state_dim=5,
-        pretrained=pretrained,
-        num_bins=num_bins,
-        freeze_encoder=freeze_encoder,
-        mode=mode,
-        encoder_ckpt_path=None,
-        visual_feat_dim=visual_feat_dim,
-        state_feat_dim=state_feat_dim,
-        token_dim=token_dim,
-        gru_hidden_dim=gru_hidden_dim,
-        dropout=0.1
-    )
+    if architecture == 'transformer':
+        model = ProgressPredictorTransformer(
+            agent_state_dim=5,
+            pretrained=pretrained,
+            num_bins=num_bins,
+            freeze_encoder=freeze_encoder,
+            mode=mode,
+            encoder_ckpt_path=None,
+            visual_feat_dim=visual_feat_dim,
+            state_feat_dim=state_feat_dim,
+            token_dim=token_dim,
+            n_heads=n_heads,
+            n_layers=n_layers,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout
+        )
+        arch_name = f"Transformer (heads={n_heads}, layers={n_layers})"
+    else:
+        model = ProgressPredictorWindowed(
+            agent_state_dim=5,
+            pretrained=pretrained,
+            num_bins=num_bins,
+            freeze_encoder=freeze_encoder,
+            mode=mode,
+            encoder_ckpt_path=None,
+            visual_feat_dim=visual_feat_dim,
+            state_feat_dim=state_feat_dim,
+            token_dim=token_dim,
+            gru_hidden_dim=gru_hidden_dim,
+            dropout=dropout
+        )
+        arch_name = f"GRU (hidden={gru_hidden_dim})"
+    
     model.load_state_dict(torch.load(model_path, map_location='cpu'))
     model.eval()
     model.window_length = window_length  # Store for inference
     print(f"Loaded windowed model in {mode} mode")
-    print(f"Architecture: Windowed (L={window_length})")
+    print(f"Architecture: {arch_name}, Window L={window_length}")
     return model
 
 
@@ -334,14 +359,25 @@ def main():
                        help='Number of bins for categorical mode')
     parser.add_argument('--window_length', type=int, default=4,
                        help='Window length L for windowed model')
+    parser.add_argument('--architecture', type=str, default='gru',
+                       choices=['gru', 'transformer'],
+                       help='Model architecture: gru or transformer')
     parser.add_argument('--visual_feat_dim', type=int, default=512,
-                       help='Visual feature dimension for windowed model')
+                       help='Visual feature dimension')
     parser.add_argument('--state_feat_dim', type=int, default=64,
-                       help='State feature dimension for windowed model')
+                       help='State feature dimension (64 for GRU, 256 for Transformer)')
     parser.add_argument('--token_dim', type=int, default=256,
-                       help='Token dimension for windowed model')
+                       help='Token dimension (256 for GRU, 512 for Transformer)')
     parser.add_argument('--gru_hidden_dim', type=int, default=128,
-                       help='GRU hidden dimension for windowed model')
+                       help='GRU hidden dimension (only for GRU architecture)')
+    parser.add_argument('--n_heads', type=int, default=8,
+                       help='Number of attention heads (only for Transformer)')
+    parser.add_argument('--n_layers', type=int, default=4,
+                       help='Number of transformer layers (only for Transformer)')
+    parser.add_argument('--dim_feedforward', type=int, default=1024,
+                       help='Feedforward dimension (only for Transformer)')
+    parser.add_argument('--dropout', type=float, default=0.1,
+                       help='Dropout rate')
     parser.add_argument('--dataset', type=str, default='pusht_episodes.pkl',
                        help='Path to dataset')
     parser.add_argument('--device', type=str, default='auto',
@@ -356,10 +392,15 @@ def main():
         mode=args.mode,
         num_bins=args.num_bins,
         window_length=args.window_length,
+        architecture=args.architecture,
         visual_feat_dim=args.visual_feat_dim,
         state_feat_dim=args.state_feat_dim,
         token_dim=args.token_dim,
-        gru_hidden_dim=args.gru_hidden_dim
+        gru_hidden_dim=args.gru_hidden_dim,
+        n_heads=args.n_heads,
+        n_layers=args.n_layers,
+        dim_feedforward=args.dim_feedforward,
+        dropout=args.dropout
     )
     
     device = args.device

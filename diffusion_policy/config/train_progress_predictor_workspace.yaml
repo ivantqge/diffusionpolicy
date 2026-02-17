@@ -19,12 +19,23 @@ model:
 
   # Windowed architecture options
   windowed: false  # Set to true to use windowed architecture
+  architecture: gru  # 'gru' or 'transformer' (only used when windowed=true)
   window_length: 4  # L: number of frames in window 
   windows_per_episode: 16  # Number of windows to sample per episode
   visual_feat_dim: 512  # Output dimension of visual encoder
-  state_feat_dim: 64  # Output dimension of state embedder 
-  token_dim: 256  # Dimension of fused tokens 
-  gru_hidden_dim: 128  # Hidden dimension of GRU 
+  state_feat_dim: 64  # Output dimension of state embedder (256 for transformer)
+  token_dim: 256  # Dimension of fused tokens (512 for transformer)
+  gru_hidden_dim: 128  # Hidden dimension of GRU (only for gru architecture)
+  # Transformer-specific options (only used when architecture=transformer)
+  n_heads: 8
+  n_layers: 4
+  dim_feedforward: 1024
+  
+  # Dual-head architecture options (rate-of-change prediction)
+  dual_head: false  # Set to true to use dual-head (push + reposition) architecture
+  push_weight: 1.0  # Weight for push head loss
+  repo_weight: 1.0  # Weight for reposition head loss
+  use_normalized_rates: true  # Use normalized rate targets from data
   
 dataset:
   episodes_path: ${task.episodes_path}
@@ -53,7 +64,7 @@ scheduler:
   patience: 5
 
 training:
-  device: "cpu"
+  device: "cuda"
   num_epochs: 50
   patience: 10
   tqdm_interval_sec: 1.0

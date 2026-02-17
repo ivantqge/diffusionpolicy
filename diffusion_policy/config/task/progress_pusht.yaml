@@ -3,6 +3,10 @@ name: progress_pusht
 # episodes .pkl produced by load_pusht_data.py -> save_trajectories_separate
 episodes_path: pusht_episodes.pkl
 
+# episodes with rate labels produced by load_pusht_data_rates.py
+# Use this path when dual_head=true
+episodes_rates_path: pusht_episodes_rates.pkl
+
 # agent_state is [agent_x, agent_y, block_x, block_y, block_angle]
 agent_state_dim: 5
 
